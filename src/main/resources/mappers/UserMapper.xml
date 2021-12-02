@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repository.UserMapper">
+    <select id="mybatisTest" resultType="domain.User">
+        <!-- db 구조 -->
+        SELECT * FROM account WHERE cash_point = #{cash_point};
+    </select>
+
+    <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
+</mapper>
