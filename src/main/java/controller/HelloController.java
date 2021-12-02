@@ -1,20 +1,19 @@
 package controller;
 
-import domain.User;
+import domain.AccountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import service.IUserService;
+import service.IAccountService;
 
 import java.util.List;
 
 @Controller // TODO: Controller Setting
 public class HelloController {
     @Autowired
-    private IUserService userService;
+    private IAccountService userService;
 
     // find views/{%return}.jsp
     @RequestMapping(value = "/hello1", method = RequestMethod.GET)
@@ -31,7 +30,9 @@ public class HelloController {
 
     @ResponseBody
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public List<User> mybatisTest(Long cash_point) {
+    public List<AccountDTO> mybatisTest(Long cash_point) {
         return userService.mybatisTest(cash_point);
     }
+
+
 }

@@ -1,12 +1,11 @@
 package service;
 
-import domain.User;
-import org.apache.ibatis.annotations.Select;
+import domain.AccountDTO;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IAccountService {
 //    @Select(value = "select * from account where cash_point = #{cash_point}")
-    List<User> mybatisTest(Long cash_point);
+    List<AccountDTO> mybatisTest(Long cash_point);
     //TODO: 추가
 }

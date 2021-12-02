@@ -1,6 +1,6 @@
 package domain;
 
-public class User {
+public class AccountDTO {
     protected String email;
     protected String password;
     protected String name;
