@@ -7,6 +7,8 @@ import java.util.List;
 
 @Repository
 public interface AccountMapper {
-    List<AccountDTO> mybatisTest(Long cash_point);
+    List<AccountDTO> mybatisTest(Long point);
+
+    List<AccountDTO> getAccountList();
     //TODO: 추가
 }

@@ -14,13 +14,17 @@ public class AccountService implements IAccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public List<AccountDTO> mybatisTest(Long cash_point) {
-        return accountMapper.mybatisTest(cash_point);
+    public List<AccountDTO> mybatisTest(Long point) {
+        return accountMapper.mybatisTest(point);
     }
 
-    //TODO: 오버라이드 해서 추가
     @Override
-    public String stockTest(){
-        return "Hello Stock World";
+    public List<AccountDTO> getAccountList() {
+        return accountMapper.getAccountList();
     }
+    //TODO: 오버라이드 해서 추가
+//    @Override
+//    public String stockTest() {
+//        return "Hello Stock World";
+//    }
 }

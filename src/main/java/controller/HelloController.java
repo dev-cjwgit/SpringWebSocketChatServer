@@ -35,13 +35,20 @@ public class HelloController {
     @ResponseBody
     @RequestMapping(value = "/stock", method = RequestMethod.GET)
     public String stock() {
-        return userService.stockTest();
+        return null;
+//        return userService.stockTest();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public List<AccountDTO> mybatisTest(Long point) {
+        return userService.mybatisTest(point);
     }
 
     @ResponseBody
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public List<AccountDTO> mybatisTest(Long cash_point) {
-        return userService.mybatisTest(cash_point);
+    public List<AccountDTO> getAccountList() {
+        return userService.getAccountList();
     }
 
 

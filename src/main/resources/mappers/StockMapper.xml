@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repository.AccountMapper">
-    <select id="mybatisTest" resultType="domain.AccountDTO">
+    <select id="getStockList" resultType="domain.StockDTO">
         <!-- db 구조 -->
-        SELECT * FROM account WHERE point = #{point};
-    </select>
-
-    <select id="getAccountList" resultType="domain.AccountDTO">
-        <!-- db 구조 -->
-        SELECT * FROM account;
+        SELECT * FROM stock;
     </select>
 
     <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
