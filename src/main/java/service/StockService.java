@@ -1,6 +1,7 @@
 package service;
 
 import domain.StockDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.StockMapper;
@@ -15,11 +16,7 @@ public class StockService implements IStockService {
     private StockMapper stockMapper;
 
     @Override
-    public List<StockDTO> getStockList() {
-        List<StockDTO> temp = stockMapper.getStockList();
-        for (StockDTO item : temp) {
-            System.out.println(item.getDate().toString().split(" ")[0]);
-        }
-        return stockMapper.getStockList();
+    public List<StockDTO> getStockList(@Param("sortType") String sortType) {
+        return stockMapper.getStockList(sortType);
     }
 }

@@ -2,6 +2,7 @@ package controller;
 
 import domain.AccountDTO;
 import domain.StockDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +37,8 @@ public class HelloController {
 
     @ResponseBody
     @RequestMapping(value = "/stock", method = RequestMethod.GET)
-    public List<StockDTO> stock() {
-        return stockService.getStockList();
+    public List<StockDTO> stock(@Param("sortType")String sortType) {
+        return stockService.getStockList(sortType);
     }
 
     @ResponseBody

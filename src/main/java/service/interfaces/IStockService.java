@@ -1,9 +1,12 @@
 package service.interfaces;
 
 import domain.StockDTO;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import java.util.List;
 
 public interface IStockService {
-//    @Select(value = "select * from account where cash_point = #{cash_point}")
-    List<StockDTO> getStockList();
+
+    List<StockDTO> getStockList(@Param("sortType")String sortType);
 }
