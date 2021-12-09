@@ -30,27 +30,19 @@ public class HelloController {
 
     @RequestMapping(value = "/user2", method = RequestMethod.POST)
     public ModelAndView goStudent(HttpServletRequest httpServletRequest) {
-        System.out.println("RequestMethod.POST");
-        String id = httpServletRequest.getParameter("id");
-        System.out.println("id : " + id);
+        String userid = httpServletRequest.getParameter("userid");
         ModelAndView mav = new ModelAndView();
         mav.setViewName("user2");
-        mav.addObject("userId", id);
+        mav.addObject("userId", userid);
         return mav;
     }
 
     // find views/{%return}.jsp
+    @ResponseBody
     @RequestMapping(value = "/hello1", method = RequestMethod.GET)
     public String hello1() {
         return "hello";
     }
-
-/*
-    @ResponseBody
-    @RequestMapping(value = "/hello2", method = RequestMethod.GET)
-    public String hello2() {
-        return "Hello Spring World Copy";
-    }*/
 
     @ResponseBody
     @RequestMapping(value = "/stock", method = RequestMethod.GET)

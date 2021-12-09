@@ -15,7 +15,7 @@
 </head>
 <body>
 <form action = "user2" method = "post">
-    student id : <input type = "text" name = "id"><br/>
+    student id : <input type = "text" name = "userid"><br/>
     <input type = "submit" value = "전송">
 </form>
 </body>
