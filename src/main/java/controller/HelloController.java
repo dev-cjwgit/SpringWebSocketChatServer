@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.IAccountService;
+import yahoofinance.Stock;
+import yahoofinance.YahooFinance;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller // TODO: Controller Setting
@@ -26,6 +30,12 @@ public class HelloController {
     @RequestMapping(value = "/hello2", method = RequestMethod.GET)
     public String hello2() {
         return "Hello Spring World Copy";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/stock", method = RequestMethod.GET)
+    public String stock() {
+        return userService.stockTest();
     }
 
     @ResponseBody

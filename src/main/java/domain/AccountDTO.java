@@ -1,10 +1,18 @@
 package domain;
 
 public class AccountDTO {
+    protected Long uid;
     protected String email;
     protected String password;
     protected String name;
 
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
 
     public String getEmail() {
         return email;

@@ -19,4 +19,8 @@ public class AccountService implements IAccountService {
     }
 
     //TODO: 오버라이드 해서 추가
+    @Override
+    public String stockTest(){
+        return "Hello Stock World";
+    }
 }
