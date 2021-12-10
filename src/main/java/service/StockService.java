@@ -26,20 +26,4 @@ public class StockService implements IStockService {
         return stockMapper.getStockList(sortType);
     }
 
-    @Override
-    public List<StockDTO> getStockToAPI(String name, String date) {
-        try {
-            Stock stock = YahooFinance.get("INTC");
-
-            BigDecimal price = stock.getQuote().getPrice();
-            BigDecimal change = stock.getQuote().getChangeInPercent();
-            BigDecimal peg = stock.getStats().getPeg();
-            BigDecimal dividend = stock.getDividend().getAnnualYieldPercent();
-
-            stock.print();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
 }

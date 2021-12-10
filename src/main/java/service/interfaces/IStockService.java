@@ -7,5 +7,4 @@ public interface IStockService {
 
     List<StockDTO> getStockList(String sortType);
 
-    List<StockDTO> getStockToAPI(String name, String date);
 }

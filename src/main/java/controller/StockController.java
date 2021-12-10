@@ -24,12 +24,4 @@ public class StockController {
     public List<StockDTO> stock(@RequestParam("sortType") String sortType) {
         return stockService.getStockList(sortType);
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/stocktestpage", method = RequestMethod.GET)
-    public List<StockDTO> getStockToAPI(@RequestParam("name") String name, @RequestParam(value = "date", required = false) String date) {
-        return stockService.getStockToAPI(name, date);
-    }
-
-
 }
