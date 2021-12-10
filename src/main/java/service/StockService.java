@@ -22,8 +22,8 @@ public class StockService implements IStockService {
     private StockMapper stockMapper;
 
     @Override
-    public List<StockDTO> getStockList(String sortType) {
-        return stockMapper.getStockList(sortType);
+    public List<StockDTO> getStockList(String name, String sortType) {
+        return stockMapper.getStockList(name, sortType);
     }
 
 }

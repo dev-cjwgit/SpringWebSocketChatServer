@@ -21,7 +21,7 @@ public class StockController {
 
     @ResponseBody
     @RequestMapping(value = "/stock", method = RequestMethod.GET)
-    public List<StockDTO> stock(@RequestParam("sortType") String sortType) {
-        return stockService.getStockList(sortType);
+    public List<StockDTO> stock(String name, String sortType) {
+        return stockService.getStockList(name, sortType);
     }
 }

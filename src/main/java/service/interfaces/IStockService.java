@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface IStockService {
 
-    List<StockDTO> getStockList(String sortType);
+    List<StockDTO> getStockList(String name, String sortType);
 
 }

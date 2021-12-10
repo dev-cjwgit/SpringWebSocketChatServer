@@ -3,7 +3,7 @@
 <mapper namespace="repository.StockMapper">
     <select id="getStockList" resultType="domain.StockDTO">
         <!-- db 구조 -->
-        SELECT * FROM stock ORDER BY `date` ${sortType};
+        SELECT * FROM stock WHERE `name` = #{name} ORDER BY `date` ${sortType};
     </select>
 
     <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
