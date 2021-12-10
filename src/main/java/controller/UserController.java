@@ -16,12 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller // TODO: Controller Setting
-public class HelloController {
+public class UserController {
     @Autowired
     private IAccountService userService;
     // TODO: Resouces, Inject, Autowired, Quilfyer - 차이점 확인 후 사용
-    @Autowired
-    private IStockService stockService;
 
     @RequestMapping(value = "/user1", method = RequestMethod.GET)
     public String goUser1() {
@@ -37,17 +35,10 @@ public class HelloController {
         return mav;
     }
 
-    // find views/{%return}.jsp
     @ResponseBody
-    @RequestMapping(value = "/hello1", method = RequestMethod.GET)
-    public String hello1() {
-        return "hello";
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/stock", method = RequestMethod.GET)
-    public List<StockDTO> stock(@Param("sortType") String sortType) {
-        return stockService.getStockList(sortType);
+    @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
+    public List<AccountDTO> getAccountList() {
+        return userService.getAccountList();
     }
 
     @ResponseBody
@@ -55,12 +46,4 @@ public class HelloController {
     public List<AccountDTO> mybatisTest(Long point) {
         return userService.mybatisTest(point);
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/userinfo", method = RequestMethod.GET)
-    public List<AccountDTO> getAccountList() {
-        return userService.getAccountList();
-    }
-
-
 }
