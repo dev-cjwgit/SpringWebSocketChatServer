@@ -95,6 +95,8 @@
 
 <button type="button" onclick="openSocket();">대화방 참여</button>
 <button type="button" onclick="closeSocket();">대회방 나가기</button>
+<button type="button" onclick="clearChat();">채팅창 청소</button>
+
 <div class="chat_wrap">
     <div class="header">
         CHAT
@@ -149,7 +151,7 @@
                     return;
                 }
                 // 메시지 전송
-                send(message);
+                send("message", message);
                 // 입력창 clear
                 clearTextarea();
             }
@@ -165,40 +167,48 @@
         //웹소켓 객체 만드는 코드
         ws = new WebSocket("ws://211.195.149.103:8080/echo.do");
         ws.onopen = function (event) {
-            if (event.data === undefined) {
-                return;
-            }
-            writeResponse("server", "채팅방에 입장하셨습니다.");
+            send("server", "${userID}님이 채팅방에 입장하셨습니다.");
         };
 
         ws.onmessage = function (event) {
-            writeResponse(event.data.split(',')[0], event.data.split(',')[1]);
+            var parseData = JSON.parse(event.data);
+            writeResponse(parseData);
         };
 
         ws.onclose = function (event) {
-            writeResponse("server", "서버가 종료되었습니다.");
+            data = {
+                "type": "server",
+                "name": "",
+                "msg": "접속이 끊겼습니다."
+            }
+            writeResponse(data)
         }
-
     }
 
-    function send(message) {
-        ws.send("${userID}," + message);
+    function send(type, message) {
+        data = {
+            "type": type,
+            "name": "${userID}",
+            "msg": message
+        };
+        ws.send(JSON.stringify(data));
     }
 
     function closeSocket() {
+        send("server", "${userID}님이 채팅방을 나가셨습니다.");
         ws.close();
     }
 
-    function writeResponse(name, msg) {
+    function writeResponse(json) {
         var LR;
-        if (name === "server") {
+        if (json.type === "server") {
             LR = "server";
-        } else if (name === "${userID}") {
+        } else if (json.name === "${userID}") {
             LR = "right"
         } else {
             LR = "left"
         }
-        appendMessageTag(LR, name, msg);
+        appendMessageTag(LR, json.name, json.msg);
     }
 
     function appendMessageTag(LR_className, name, msg) {
@@ -233,6 +243,10 @@
 
     function clearTextarea() {
         $('div.input-div textarea').val('');
+    }
+
+    function clearChat(){
+        $('div.chat ul').empty();
     }
 
     window.onload = init();

@@ -1,16 +1,14 @@
 package controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import domain.server.ChatModel;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.RemoteEndpoint.Basic;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
@@ -31,22 +29,21 @@ public class WebSocketController {
     @OnOpen
     public void onOpen(Session session) {
         logger.info("Open session id:" + session.getId());
-        try {
+        /*        try {
             final Basic basic = session.getBasicRemote();
 //            basic.sendText("채팅방 입장");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
+        }*/
         sessionList.add(session);
-        sendAllSessionToMessage(session, "server", session.getId() + " 님이 접속하셧습니다.");
+//        sendAllSessionToMessage(session, new ChatDTO("", "", ""));
     }
 
-    private void sendAllSessionToMessage(Session self, String sender, String message) {
-
+    private void sendAllSessionToMessage(Session self, ChatModel chatDTO) {
         try {
             for (Session session : WebSocketController.sessionList) {
                 if (!self.getId().equals(session.getId())) {
-                    session.getBasicRemote().sendText(sender + "," + message);
+                    session.getBasicRemote().sendText(chatDTO.toJson());
                 }
             }
         } catch (Exception e) {
@@ -55,18 +52,17 @@ public class WebSocketController {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
-        String sender = message.split(",")[0];
-        message = message.split(",")[1];
+    public void onMessage(String message, Session session) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChatModel chatDTO = objectMapper.readValue(message, ChatModel.class);
 
-        logger.info("Message From " + sender + "," + message);
+        sendAllSessionToMessage(session, chatDTO);
         try {
-            final Basic basic = session.getBasicRemote();
-            basic.sendText(sender + "," + message);
+            final RemoteEndpoint.Basic basic = session.getBasicRemote();
+            basic.sendText(chatDTO.toJson());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        sendAllSessionToMessage(session, sender, message);
     }
 
     @OnError
@@ -77,7 +73,7 @@ public class WebSocketController {
     @OnClose
     public void onClose(Session session) {
         logger.info("Session " + session.getId() + " has ended");
-        sendAllSessionToMessage(session, "server", session.getId() + " 님이 퇴장하셧습니다.");
+//        sendAllSessionToMessage(session, "server", session.getId() + " 님이 퇴장하셧습니다.");
         sessionList.remove(session);
     }
 }
