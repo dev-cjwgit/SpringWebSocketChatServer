@@ -11,10 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 import service.interfaces.IAccountService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller // TODO: Controller Setting
-public class UserController {
+public class AccountController {
     @Autowired
     private IAccountService userService;
     // TODO: Resouces, Inject, Autowired, Quilfyer - 차이점 확인 후 사용
@@ -28,13 +29,16 @@ public class UserController {
 
     @RequestMapping(value = "/index", method = RequestMethod.POST)
     @ApiOperation(value = "유저 페이지", notes = "유저를 받을 수 있는 페이지로 이동합니다.")
-    public ModelAndView goStudent(HttpServletRequest httpServletRequest) {
+    public ModelAndView loginProcess(HttpServletRequest httpServletRequest) {
         String userID = httpServletRequest.getParameter("userID");
         String userPW = httpServletRequest.getParameter("userPW");
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
+        mav.setViewName("chat");
         mav.addObject("userID", userID);
         mav.addObject("userPW", userPW);
+
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("id", userID);
         return mav;
     }
 
