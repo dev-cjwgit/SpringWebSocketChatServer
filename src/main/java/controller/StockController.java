@@ -2,6 +2,7 @@ package controller;
 
 import domain.StockDTO;
 import domain.param.StockRequestModel;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class StockController {
 
     @ResponseBody
     @RequestMapping(value = "/stock", method = RequestMethod.GET)
+    @ApiOperation(value = "주식 정보", notes = "주식 정보를 가져옵니다.")
     public List<StockDTO> stock(@ModelAttribute StockRequestModel model) {
-        System.out.println(model.toString());
         return stockService.getStockList(model);
     }
 }
