@@ -26,8 +26,6 @@ public class WebSocketChat {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketChat.class);
 
     public WebSocketChat() {
-        // TODO Auto-generated constructor stub
-        System.out.println("Hello1");
     }
 
     @OnOpen
@@ -35,9 +33,8 @@ public class WebSocketChat {
         logger.info("Open session id:" + session.getId());
         try {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("Func1");
+            basic.sendText("채팅방 입장");
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println(e.getMessage());
         }
         sessionList.add(session);
@@ -52,7 +49,6 @@ public class WebSocketChat {
                 }
             }
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println(e.getMessage());
         }
     }
@@ -66,9 +62,8 @@ public class WebSocketChat {
         logger.info("Message From " + sender + ": " + message);
         try {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("Func2 : " + message);
+            basic.sendText("나 : " + message);
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println(e.getMessage());
         }
         sendAllSessionToMessage(session, sender, message);

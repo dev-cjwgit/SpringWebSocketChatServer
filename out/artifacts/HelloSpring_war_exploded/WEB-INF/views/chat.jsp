@@ -28,7 +28,8 @@
     <button type="button" onclick="javascript:clearText();">대화내용 지우기</button>
 </div>
 <!-- Server responses get written here -->
-<div id="messages"/>
+<div id="messages">
+</div>
 
 <script type="text/javascript">
     var ws;
