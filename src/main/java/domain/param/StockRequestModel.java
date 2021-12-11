@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class StockRequestDTO {
+public class StockRequestModel {
     protected String name;
     protected String sortType = "DESC";
     protected String startDate = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA).format(new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * -1)));
