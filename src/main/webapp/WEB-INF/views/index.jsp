@@ -6,18 +6,16 @@
   Time: 8:18 오후
   To change this template use File | Settings | File Templates.
 --%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Insert title here</title>
+    <title>로그인 정보</title>
 </head>
 <body>
-<form action = "user2" method = "post">
-    student id : <input type = "text" name = "userid"><br/>
-    <input type = "submit" value = "전송">
-</form>
+유저 아 이 디 : ${userID} <br>
+유저 비밀번호 : ${userPW}
 </body>
 </html>
--
+
+

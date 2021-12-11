@@ -5,6 +5,15 @@ public class AccountDTO {
     protected String email;
     protected String password;
     protected String name;
+    protected Long point;
+
+    public Long getPoint() {
+        return point;
+    }
+
+    public void setPoint(Long point) {
+        this.point = point;
+    }
 
     public Long getUid() {
         return uid;
