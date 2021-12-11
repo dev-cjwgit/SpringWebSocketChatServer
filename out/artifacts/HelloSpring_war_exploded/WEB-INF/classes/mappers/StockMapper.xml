@@ -2,10 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repository.StockMapper">
     <select id="getStockList" resultType="domain.StockDTO">
-        <![CDATA[
-        SELECT * FROM stock WHERE `name` = #{model.name} AND `date` >= #{model.startDate} AND `date` <= #{model.endDate} ORDER BY `date` ${model.sortType};
-        ]]>
+
+        SELECT * FROM stock
+        <where>
+            <if test="model.name != null">AND `name` = #{model.name}</if>
+            <if test="model.startDate != null">AND `date` >= #{model.startDate}</if>
+            <if test="model.endDate != null">AND `date`&lt;= #{model.endDate}</if>
+            <if test="model.sortType != null">ORDER BY `date` ${model.sortType}</if>
+        </where>
     </select>
 
     <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
 </mapper>
+
+
+        <!--
+        <![CDATA[
+                SELECT * FROM stock WHERE `name` = #{model.name} AND `date` >= #{model.startDate} AND `date` <= #{model.endDate} ORDER BY `date` ${model.sortType};
+                ]]>
+        -->

@@ -34,7 +34,15 @@ public class StockRequestDTO {
     }
 
     public void setSortType(String sortType) {
-        this.sortType = sortType;
+        sortType = sortType.toLowerCase(Locale.ROOT);
+        switch (sortType) {
+            case "asc":
+            case "desc":
+                this.sortType = sortType;
+                break;
+            default:
+                this.sortType = "desc";
+        }
     }
 
     public String getStartDate() {
