@@ -45,7 +45,7 @@ public class WebSocketController {
         try {
             for (Session session : WebSocketController.sessionList) {
                 if (!self.getId().equals(session.getId())) {
-                    session.getBasicRemote().sendText(sender + " : " + message);
+                    session.getBasicRemote().sendText(sender + "," + message);
                 }
             }
         } catch (Exception e) {
@@ -55,14 +55,13 @@ public class WebSocketController {
 
     @OnMessage
     public void onMessage(String message, Session session) {
+        String sender = message.split(",")[0];
+        message = message.split(",")[1];
 
-        String sender = message.split(",")[1];
-        message = message.split(",")[0];
-
-        logger.info("Message From " + sender + ": " + message);
+        logger.info("Message From " + sender + "," + message);
         try {
             final Basic basic = session.getBasicRemote();
-//            basic.sendText("나 : " + message);
+            basic.sendText(sender + "," + message);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

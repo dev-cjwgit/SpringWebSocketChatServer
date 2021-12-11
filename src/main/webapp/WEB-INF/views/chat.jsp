@@ -17,127 +17,141 @@
 </head>
 
 
-<button type="button" onclick="openSocket();">대화방 참여</button>
-<button type="button" onclick="closeSocket();">대회방 나가기</button>
+<%--<button type="button" onclick="openSocket();">대화방 참여</button>--%>
+<%--<button type="button" onclick="closeSocket();">대회방 나가기</button>--%>
 <hr>
-
 <style type="text/css">
     * {
-        font-family: 나눔고딕;
+        margin: 0;
+        padding: 0;
     }
 
-    #messageWindow {
-        background: black;
-        color: greenyellow;
-    }
-
-    #inputMessage {
-        width: 500px;
-        height: 20px
-    }
-
-    #btn-submit {
-        background: white;
-        background: #F7E600;
-        width: 60px;
-        height: 30px;
-        color: #607080;
-        border: none;
-    }
-
-    #main-container {
-        width: 600px;
-        height: 680px;
-        border: 1px solid black;
-        margin: 10px;
-        display: inline-block;
-
-    }
-
-    #chat-container {
-        vertical-align: bottom;
-        border: 1px solid black;
-        margin: 10px;
-        min-height: 600px;
-        max-height: 600px;
-        overflow: scroll;
-        overflow-x: hidden;
-        background: #9bbbd4;
-    }
-
-    .chat {
-        font-size: 20px;
-        color: black;
-        margin: 5px;
-        min-height: 20px;
-        padding: 5px;
-        min-width: 50px;
-        text-align: left;
-        height: auto;
-        word-break: break-all;
-        background: #ffffff;
-        width: auto;
-        display: inline-block;
-        border-radius: 10px 10px 10px 10px;
-    }
-
-    .notice {
-        color: #607080;
-        font-weight: bold;
-        border: none;
+    .chat_wrap .header {
+        font-size: 14px;
+        padding: 15px 0;
+        background: #F18C7E;
+        color: white;
         text-align: center;
-        background-color: #9bbbd4;
-        display: block;
     }
 
-    .my-chat {
-        text-align: right;
-        background: #F7E600;
-        border-radius: 10px 10px 10px 10px;
+    .chat_wrap .chat {
+        padding-bottom: 110px;
     }
 
-    #bottom-container {
-        margin: 10px;
+    .chat_wrap .chat ul {
+        width: 100%;
+        list-style: none;
     }
 
-    .chat-info {
-        color: #556677;
-        font-size: 10px;
-        text-align: right;
-        padding: 5px;
-        padding-top: 0px;
-
+    .chat_wrap .chat ul li {
+        width: 100%;
     }
 
-    .chat-box {
+    .chat_wrap .chat ul li.left {
         text-align: left;
     }
 
-    .my-chat-box {
+    .chat_wrap .chat ul li.right {
         text-align: right;
     }
 
+    .chat_wrap .chat ul li > div {
+        font-size: 13px;
+    }
+
+    .chat_wrap .chat ul li > div.sender {
+        margin: 10px 20px 0 20px;
+        font-weight: bold;
+    }
+
+    .chat_wrap .chat ul li > div.message {
+        display: inline-block;
+        word-break: break-all;
+        margin: 5px 20px;
+        max-width: 75%;
+        border: 1px solid #888;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #FCFCFC;
+        color: #555;
+        text-align: left;
+    }
+
+    .chat_wrap .input-div {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #FFF;
+        text-align: center;
+        border-top: 1px solid #F18C7E;
+    }
+
+    .chat_wrap .input-div > textarea {
+        width: 100%;
+        height: 80px;
+        border: none;
+        padding: 10px;
+    }
+
+    .format {
+        display: none;
+    }
 
 </style>
 
-<body style="top:50px;">
-<div id="main-container">
-    <input type="text" id="sender" value="${sessionScope.id}" style="display: none;">
-    <div id="chat-container">
+<body class="mainbody" style="top:50px;">
 
+<div class="chat_wrap">
+    <div class="header">
+        CHAT
     </div>
-    <div id="bottom-container">
-        <input id="inputMessage" type="text">
-        <input id="btn-submit" type="button" onclick="send()" value="전송">
+    <div class="chat">
+        <ul>
+            <!-- 동적 생성 -->
+        </ul>
+    </div>
+    <div class="input-div">
+        <textarea placeholder="Press Enter for send message."></textarea>
+    </div>
+
+    <!-- format -->
+
+    <div class="chat format">
+        <ul>
+            <li>
+                <div class="sender">
+                    <span></span>
+                </div>
+                <div class="message">
+                    <span></span>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
+
+
 </body>
 
 <!-- websocket javascript -->
 <script type="text/javascript">
     var ws;
-    var textarea = document.getElementById("messageWindow");
-    var inputMessage = document.getElementById('inputMessage');
+
+    function init() {
+        // enter 키 이벤트
+        $(document).on('keydown', 'div.input-div textarea', function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                const message = $(this).val();
+                // 메시지 전송
+                send(message);
+                // 입력창 clear
+                clearTextarea();
+            }
+        });
+
+        openSocket();
+    }
 
     function openSocket() {
         if (ws !== undefined && ws.readyState !== WebSocket.CLOSED) {
@@ -153,9 +167,8 @@
         };
 
         ws.onmessage = function (event) {
-            console.log('writeResponse');
-            console.log(event.data)
-            writeResponse(event.data);
+
+            writeResponse(event.data.split(',')[0], event.data.split(',')[1]);
         };
 
         ws.onclose = function (event) {
@@ -164,47 +177,50 @@
 
     }
 
-    function send() {
-        var chatMsg = inputMessage.value + "," + document.getElementById("sender").value;
-        ;
-        if (chatMsg == '') {
-            return;
-        }
-        var date = new Date();
-        var dateInfo = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        var $chat = $("<div class='my-chat-box'><div class='chat my-chat'>" + chatMsg + "</div><div class='chat-info'>" + dateInfo + "</div></div>");
-        $('#chat-container').append($chat);
-        inputMessage.value = "";
-        ws.send(chatMsg);
-        $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight + 20);
-
+    function send(message) {
+        ws.send("${userID}," + message);
     }
 
     function closeSocket() {
         ws.close();
     }
 
-    function writeResponse(text) {
-        var chatMsg = text;
-        var date = new Date();
-        var dateInfo = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        if (chatMsg.substring(0, 6) == 'server') {
-            var $chat = $("<div class='chat notice'>" + chatMsg + "</div>");
-            $('#chat-container').append($chat);
-        } else {
-            var $chat = $("<div class='chat-box'><div class='chat'>" + chatMsg + "</div><div class='chat-info chat-box'>" + dateInfo + "</div></div>");
-            $('#chat-container').append($chat);
-        }
-        $('#chat-container').scrollTop($('#chat-container')[0].scrollHeight + 20);
+    function writeResponse(name, msg) {
+        const LR = (name != "${userID}") ? "left" : "right";
+        appendMessageTag(LR, name, msg);
+    }
+
+    function appendMessageTag(LR_className, name, msg) {
+        const chatLi = createMessageTag(LR_className, name, msg);
+
+        $('div.chat:not(.format) ul').append(chatLi);
+        console.log("스크롤 : " + $("div.chat")[0].scrollHeight);
+        // 스크롤바 아래 고정
+        window.scroll(0, $("div.chat")[0].scrollHeight)
+        // $("#mainbody").scrollTop($("div.chat")[0].scrollHeight);
+    }
+
+    // 메세지 태그 생성
+    function createMessageTag(LR_className, name, msg) {
+        // 형식 가져오기
+        let chatLi = $('div.chat.format ul li').clone();
+
+        // 값 채우기
+        chatLi.addClass(LR_className);
+        chatLi.find('.sender span').text(name);
+        chatLi.find('.message span').text(msg);
+
+        return chatLi;
     }
 
     function clearTextarea() {
         $('div.input-div textarea').val('');
     }
 
-    window.onload = openSocket();
+    window.onload = init();
 </script>
 
+<%--
 <script type="text/javascript">
     $(function () {
         $('#inputMessage').keydown(function (key) {
@@ -219,6 +235,7 @@
 
     })
 </script>
+--%>
 
 
 </html>
