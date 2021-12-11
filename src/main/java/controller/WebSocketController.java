@@ -38,6 +38,7 @@ public class WebSocketController {
             System.out.println(e.getMessage());
         }
         sessionList.add(session);
+        sendAllSessionToMessage(session, "server", session.getId() + " 님이 접속하셧습니다.");
     }
 
     private void sendAllSessionToMessage(Session self, String sender, String message) {
@@ -76,6 +77,7 @@ public class WebSocketController {
     @OnClose
     public void onClose(Session session) {
         logger.info("Session " + session.getId() + " has ended");
+        sendAllSessionToMessage(session, "server", session.getId() + " 님이 퇴장하셧습니다.");
         sessionList.remove(session);
     }
 }
