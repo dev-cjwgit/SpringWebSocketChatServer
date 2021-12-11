@@ -1,4 +1,4 @@
-package server;
+package controller;
 
 import org.springframework.stereotype.Controller;
 
@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
 
 @Controller
 @ServerEndpoint(value = "/echo.do")
-public class WebSocketChat {
+public class WebSocketController {
 
     private static final List<Session> sessionList = new ArrayList<Session>();
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketChat.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
 
-    public WebSocketChat() {
+    public WebSocketController() {
     }
 
     @OnOpen
@@ -33,7 +33,7 @@ public class WebSocketChat {
         logger.info("Open session id:" + session.getId());
         try {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("채팅방 입장");
+//            basic.sendText("채팅방 입장");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -43,7 +43,7 @@ public class WebSocketChat {
     private void sendAllSessionToMessage(Session self, String sender, String message) {
 
         try {
-            for (Session session : WebSocketChat.sessionList) {
+            for (Session session : WebSocketController.sessionList) {
                 if (!self.getId().equals(session.getId())) {
                     session.getBasicRemote().sendText(sender + " : " + message);
                 }
@@ -62,7 +62,7 @@ public class WebSocketChat {
         logger.info("Message From " + sender + ": " + message);
         try {
             final Basic basic = session.getBasicRemote();
-            basic.sendText("나 : " + message);
+//            basic.sendText("나 : " + message);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
