@@ -1,6 +1,7 @@
 package repository;
 
 import domain.StockDTO;
+import domain.param.StockRequestDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,6 @@ import java.util.List;
 @Repository
 public interface StockMapper {
 
-    List<StockDTO> getStockList(@Param("name") String name, @Param("sortType") String sortType);
+    List<StockDTO> getStockList(@Param("model") StockRequestDTO model);
     //TODO: 추가
 }

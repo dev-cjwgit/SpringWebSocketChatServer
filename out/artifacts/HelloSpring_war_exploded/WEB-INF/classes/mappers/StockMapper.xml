@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="repository.StockMapper">
     <select id="getStockList" resultType="domain.StockDTO">
-        <!-- db 구조 -->
-        SELECT * FROM stock ORDER BY `date` ${sortType};
+        <![CDATA[
+        SELECT * FROM stock WHERE `name` = #{model.name} AND `date` >= #{model.startDate} AND `date` <= #{model.endDate} ORDER BY `date` ${model.sortType};
+        ]]>
     </select>
 
     <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
