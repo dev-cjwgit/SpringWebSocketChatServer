@@ -1,15 +1,5 @@
-﻿<%--
-    TODO: jsp
-  Created by IntelliJ IDEA.
-  User: jinwoo
-  Date: 2021/10/27
-  Time: 8:18 오후
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+﻿<html>
+
 <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -17,8 +7,7 @@
 </head>
 
 
-<%--<button type="button" onclick="openSocket();">대화방 참여</button>--%>
-<%--<button type="button" onclick="closeSocket();">대회방 나가기</button>--%>
+<body style="top:50px;" class="mainbody">
 <hr>
 <style type="text/css">
     * {
@@ -53,6 +42,15 @@
 
     .chat_wrap .chat ul li.right {
         text-align: right;
+    }
+
+    .chat_wrap .chat .server {
+        border: none;
+        text-align: center;
+        background-color: grey;
+        color: white;
+        font-size: 13px;
+        line-height: 200%;
     }
 
     .chat_wrap .chat ul li > div {
@@ -92,15 +90,11 @@
         border: none;
         padding: 10px;
     }
-
-    .format {
-        display: none;
-    }
-
 </style>
 
-<body class="mainbody" style="top:50px;">
 
+<button type="button" onclick="openSocket();">대화방 참여</button>
+<button type="button" onclick="closeSocket();">대회방 나가기</button>
 <div class="chat_wrap">
     <div class="header">
         CHAT
@@ -116,7 +110,7 @@
 
     <!-- format -->
 
-    <div class="chat format">
+    <div class="chat-format">
         <ul>
             <li>
                 <div class="sender">
@@ -128,12 +122,19 @@
             </li>
         </ul>
     </div>
+
+    <div class="server-format">
+        <ul>
+            <li>
+                <div>
+                    <span></span>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 
 
-</body>
-
-<!-- websocket javascript -->
 <script type="text/javascript">
     var ws;
 
@@ -143,6 +144,10 @@
             if (e.keyCode == 13 && !e.shiftKey) {
                 e.preventDefault();
                 const message = $(this).val();
+                if (message === "") {
+                    alert("메세지를 입력해주세요.");
+                    return;
+                }
                 // 메시지 전송
                 send(message);
                 // 입력창 clear
@@ -163,16 +168,15 @@
             if (event.data === undefined) {
                 return;
             }
-            writeResponse(event.data);
+            writeResponse("server", "채팅방에 입장하셨습니다.");
         };
 
         ws.onmessage = function (event) {
-
             writeResponse(event.data.split(',')[0], event.data.split(',')[1]);
         };
 
         ws.onclose = function (event) {
-            writeResponse("대화 종료");
+            writeResponse("server", "서버가 종료되었습니다.");
         }
 
     }
@@ -186,15 +190,21 @@
     }
 
     function writeResponse(name, msg) {
-        const LR = (name != "${userID}") ? "left" : "right";
+        var LR;
+        if (name === "server") {
+            LR = "server";
+        } else if (name === "${userID}") {
+            LR = "right"
+        } else {
+            LR = "left"
+        }
         appendMessageTag(LR, name, msg);
     }
 
     function appendMessageTag(LR_className, name, msg) {
         const chatLi = createMessageTag(LR_className, name, msg);
+        $('div.chat ul').append(chatLi);
 
-        $('div.chat:not(.format) ul').append(chatLi);
-        console.log("스크롤 : " + $("div.chat")[0].scrollHeight);
         // 스크롤바 아래 고정
         window.scroll(0, $("div.chat")[0].scrollHeight)
         // $("#mainbody").scrollTop($("div.chat")[0].scrollHeight);
@@ -203,13 +213,21 @@
     // 메세지 태그 생성
     function createMessageTag(LR_className, name, msg) {
         // 형식 가져오기
-        let chatLi = $('div.chat.format ul li').clone();
+        let chatLi
+        if (LR_className !== "server") {
+            chatLi = $('div.chat-format ul li').clone();
+            // 값 채우기
+            chatLi.addClass(LR_className);
+            chatLi.find('.sender span').text(name);
+            chatLi.find('.message span').text(msg);
+        } else {
+            chatLi = $('div.server-format ul li').clone();
+            // chatLi.children().removeClass("message");
+            // 값 채우기
+            chatLi.addClass("server");
+            chatLi.find('span').text(msg);
 
-        // 값 채우기
-        chatLi.addClass(LR_className);
-        chatLi.find('.sender span').text(name);
-        chatLi.find('.message span').text(msg);
-
+        }
         return chatLi;
     }
 
@@ -220,24 +238,7 @@
     window.onload = init();
 </script>
 
-<%--
-<script type="text/javascript">
-    $(function () {
-        $('#inputMessage').keydown(function (key) {
-            if (key.keyCode == 13) {
-                $('#inputMessage').focus();
-                send();
-            }
-        });
-        $('#btn-submit').click(function () {
-            send();
-        });
 
-    })
-</script>
---%>
-
+</body><!-- websocket javascript -->
 
 </html>
-
-
