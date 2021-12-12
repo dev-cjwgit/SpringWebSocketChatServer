@@ -36,7 +36,7 @@ public class AccountController {
     public ModelAndView loginProcess(HttpServletRequest httpServletRequest) {
         String userEmail = httpServletRequest.getParameter("userEmail");
         String userPasswrod = httpServletRequest.getParameter("userPassword");
-        String roomid = httpServletRequest.getParameter("roomid");
+        String roomid = httpServletRequest.getParameter("roomID");
         ModelAndView mav = new ModelAndView();
 
         int result = userService.isLogin(userEmail, userPasswrod);

@@ -1,5 +1,5 @@
 ﻿<html>
-
+<%-- copyright https://dororongju.tistory.com/151 --%>
 <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,10 +11,9 @@
 <hr>
 
 
-<button type="button" onclick="openSocket();">대화방 참여</button>
-<button type="button" onclick="closeSocket();">대회방 나가기</button>
-<button type="button" onclick="clearChat();">채팅창 청소</button>
-
+<%--<button type="button" onclick="openSocket();">대화방 참여</button>--%>
+<%--<button type="button" onclick="closeSocket();">대회방 나가기</button>--%>
+<button type="button" onclick="clearChat();">채팅 청소하기</button>
 <div class="chat_wrap">
     <div class="header">
         ${roomName} 에 오신것을 환영합니다.
@@ -62,7 +61,7 @@
     function init() {
         // enter 키 이벤트
         $(document).on('keydown', 'div.input-div textarea', function (e) {
-            if (e.keyCode == 13 && !e.shiftKey) {
+            if (e.keyCode === 13 && !e.shiftKey) {
                 e.preventDefault();
                 const message = $(this).val();
                 if (message === "") {
