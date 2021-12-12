@@ -27,7 +27,7 @@
         </tr><!-- 두번째 줄 끝 -->
         <tr>
             <td>방 번 호</td>
-            <td><input type="text" name="roomName"></td>
+            <td><input type="text" name="roomid"></td>
         </tr>
     </table>
 </form>

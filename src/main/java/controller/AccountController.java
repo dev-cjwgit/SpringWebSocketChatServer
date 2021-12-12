@@ -36,7 +36,7 @@ public class AccountController {
     public ModelAndView loginProcess(HttpServletRequest httpServletRequest) {
         String userEmail = httpServletRequest.getParameter("userEmail");
         String userPasswrod = httpServletRequest.getParameter("userPassword");
-        String roomName = httpServletRequest.getParameter("roomName");
+        String roomid = httpServletRequest.getParameter("roomid");
         ModelAndView mav = new ModelAndView();
 
         int result = userService.isLogin(userEmail, userPasswrod);
@@ -46,7 +46,7 @@ public class AccountController {
             session.setAttribute("account", dto);
             mav.setViewName("chat");
             mav.addObject("userEmail", userEmail);
-            mav.addObject("roomName", roomName);
+            mav.addObject("roomName", roomid);
         } else {
             mav.setViewName("login");
         }
