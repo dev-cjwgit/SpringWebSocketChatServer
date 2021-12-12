@@ -1,10 +1,13 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import domain.AccountDTO;
 import domain.server.ChatModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import service.interfaces.IAccountService;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -18,12 +21,16 @@ import java.util.Map;
 @Controller
 @ServerEndpoint(value = "/echo.do")
 public class WebSocketController {
+    public static IAccountService userService;
 
     private static final List<Session> sessionList = new ArrayList<Session>();
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
 
     private static final Map<String, ChatModel> userList = new HashMap<>();
+
+    public WebSocketController() {
+    }
 
     @OnOpen
     public void onOpen(Session session) {
@@ -58,21 +65,15 @@ public class WebSocketController {
         ChatModel chatModel = objectMapper.readValue(message, ChatModel.class);
         switch (chatModel.getCmd()) {
             case "enter_user":
-                session.getBasicRemote().sendText(new ChatModel("setname", null, "익명" + cnt++, null, null).toJson());
-                /*try {
-//                    AccountDTO dto = AccountController.userService.getAccount(chatModel.getEmail());
-//                    chatModel.setName(dto.getName());
-//                    session.getBasicRemote().sendText(chatModel.toJson());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }*/
-//                session.getBasicRemote().sendText(chatModel.toJson());
+//                session.getBasicRemote().sendText(new ChatModel("setname", null, "익명" + cnt++, null, null).toJson());
                 try {
-                    chatModel.setName("익명" + (cnt - 1));
+                    AccountDTO dto = userService.getAccount(chatModel.getEmail());
+                    chatModel.setName(dto.getName());
                     userList.put(session.getId(), chatModel.clone());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+//                session.getBasicRemote().sendText(chatModel.toJson());
                 chatModel.setMsg(chatModel.getName() + " 님이 입장하셨습니다.");
 
             case "msg":

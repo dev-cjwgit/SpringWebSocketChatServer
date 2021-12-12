@@ -18,7 +18,12 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private IAccountService userService;
+
+    public AccountController() {
+    }
+
     // TODO: Resouces, Inject, Autowired, Quilfyer - 차이점 확인 후 사용
+
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiOperation(value = "유저 페이지", notes = "유저를 입력할 수 있는 페이지로 이동합니다.")

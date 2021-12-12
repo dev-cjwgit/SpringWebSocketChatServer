@@ -200,9 +200,7 @@
         var LR;
         if (json.cmd === "enter_user" || json.cmd === "exit_user") {
             LR = "server";
-        } else if (json.cmd === "setname") {
             name = json.name;
-            return;
         } else if (json.email === "${userEmail}") {
             LR = "right"
         } else {

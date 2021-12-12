@@ -1,5 +1,6 @@
 package service;
 
+import controller.WebSocketController;
 import domain.AccountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,13 @@ import java.util.List;
 
 @Service
 public class AccountService implements IAccountService {
-
     @Autowired // 의존성 주입
     private AccountMapper accountMapper;
+
+    public AccountService(){
+        WebSocketController.userService = this; // TODO: Refactoring
+    }
+
 
     @Override
     public AccountDTO getAccount(String email) {
