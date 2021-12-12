@@ -1,6 +1,7 @@
 package repository;
 
 import domain.AccountDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 public interface AccountMapper {
     List<AccountDTO> mybatisTest(Long point);
 
-    List<AccountDTO> getAccountList();
+    AccountDTO getAccount(@Param(value = "email") String email);
+
+    int isLogin(@Param(value = "email") String email, @Param(value = "password") String password);
     //TODO: 추가
 }

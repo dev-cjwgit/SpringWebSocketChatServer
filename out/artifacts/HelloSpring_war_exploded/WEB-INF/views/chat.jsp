@@ -139,6 +139,7 @@
 
 <script type="text/javascript">
     var ws;
+    var name = "익명";
 
     function init() {
         // enter 키 이벤트
@@ -151,7 +152,7 @@
                     return;
                 }
                 // 메시지 전송
-                send("message", message);
+                send("msg", "text", message);
                 // 입력창 clear
                 clearTextarea();
             }
@@ -167,7 +168,7 @@
         //웹소켓 객체 만드는 코드
         ws = new WebSocket("ws://211.195.149.103:8080/echo.do");
         ws.onopen = function (event) {
-            send("server", "${userID}님이 채팅방에 입장하셨습니다.");
+            send("enter_user", "text", "connect");
         };
 
         ws.onmessage = function (event) {
@@ -176,34 +177,33 @@
         };
 
         ws.onclose = function (event) {
-            data = {
-                "type": "server",
-                "name": "",
-                "msg": "접속이 끊겼습니다."
-            }
-            writeResponse(data)
+            appendMessageTag("server", "", "서버와 연결이 끊겼습니다.");
         }
     }
 
-    function send(type, message) {
+    function send(cmd, type, message) {
         data = {
+            "cmd": cmd,
             "type": type,
-            "name": "${userID}",
+            "name": name,
+            "email": "${userEmail}",
             "msg": message
         };
         ws.send(JSON.stringify(data));
     }
 
     function closeSocket() {
-        send("server", "${userID}님이 채팅방을 나가셨습니다.");
         ws.close();
     }
 
     function writeResponse(json) {
         var LR;
-        if (json.type === "server") {
+        if (json.cmd === "enter_user" || json.cmd === "exit_user") {
             LR = "server";
-        } else if (json.name === "${userID}") {
+        } else if (json.cmd === "setname") {
+            name = json.name;
+            return;
+        } else if (json.email === "${userEmail}") {
             LR = "right"
         } else {
             LR = "left"
@@ -245,7 +245,7 @@
         $('div.input-div textarea').val('');
     }
 
-    function clearChat(){
+    function clearChat() {
         $('div.chat ul').empty();
     }
 

@@ -4,10 +4,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-public class ChatModel {
+public class ChatModel implements Cloneable {
+    private String cmd;
     private String type;
     private String name;
     private String msg;
+    private String email;
+
+    @Override
+    public ChatModel clone() throws CloneNotSupportedException {
+        return (ChatModel) super.clone();
+    }
+
+    public ChatModel(String cmd, String type, String name, String msg, String email) {
+        this.cmd = cmd;
+        this.type = type;
+        this.name = name;
+        this.msg = msg;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getCmd() {
+        return cmd;
+    }
+
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getType() {
         return type;
@@ -34,12 +65,6 @@ public class ChatModel {
     }
 
     public ChatModel() {
-    }
-
-    public ChatModel(String type, String name, String msg) {
-        this.type = type;
-        this.name = name;
-        this.msg = msg;
     }
 
     public String toJson() throws IOException {

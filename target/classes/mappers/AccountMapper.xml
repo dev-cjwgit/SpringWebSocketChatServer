@@ -6,10 +6,16 @@
         SELECT * FROM account WHERE point = #{point};
     </select>
 
-    <select id="getAccountList" resultType="domain.AccountDTO">
+    <select id="getAccount" resultType="domain.AccountDTO">
         <!-- db 구조 -->
-        SELECT * FROM account;
+        SELECT * FROM account WHERE `email` = #{email};
     </select>
 
+    <select id="isLogin" resultType="int">
+        SELECT count(*)
+        FROM account
+        WHERE `email` = #{email}
+          AND `password` = #{password};
+    </select>
     <!-- TODO: 추가 (함수명과 id 동일), return type DTO 반환 값 -->
 </mapper>

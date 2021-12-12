@@ -18,12 +18,12 @@
     <table border="1">
         <tr><!-- 첫번째 줄 시작 -->
             <td>아 이 디</td>
-            <td><input type = "text" name = "userID"></td>
+            <td><input type = "text" name = "userEmail"></td>
             <td rowspan="2"><input type = "submit" value = "로그인" ></td>
         </tr><!-- 첫번째 줄 끝 -->
         <tr><!-- 두번째 줄 시작 -->
             <td>비밀번호</td>
-            <td><input type = "text" name = "userPW"></td>
+            <td><input type = "text" name = "userPassword"></td>
         </tr><!-- 두번째 줄 끝 -->
     </table>
 </form>
