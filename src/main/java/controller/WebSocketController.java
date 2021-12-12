@@ -36,14 +36,7 @@ public class WebSocketController {
     @OnOpen
     public void onOpen(Session session) {
         logger.info("Open session id:" + session.getId());
-        /*        try {
-            final Basic basic = session.getBasicRemote();
-//            basic.sendText("채팅방 입장");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }*/
         sessionList.add(session);
-//        sendAllSessionToMessage(session, new ChatDTO("", "", ""));
     }
 
     private void sendAllSessionToMessage(String chatName, String json) {
@@ -59,9 +52,7 @@ public class WebSocketController {
     private void sendAllSessionToMessage(String json) {
         try {
             for (Session session : WebSocketController.sessionList) {
-//                if (!self.getId().equals(session.getId())) {
                 session.getBasicRemote().sendText(json);
-//                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -70,11 +61,11 @@ public class WebSocketController {
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
+//        session.getBasicRemote().sendText("");
         ObjectMapper objectMapper = new ObjectMapper();
         ChatModel chatModel = objectMapper.readValue(message, ChatModel.class);
         switch (chatModel.getCmd()) {
             case "enter_user":
-//                session.getBasicRemote().sendText(new ChatModel("setname", null, "익명" + cnt++, null, null).toJson());
                 try {
                     AccountDTO dto = userService.getAccount(chatModel.getEmail());
                     chatModel.setName(dto.getName());
@@ -87,7 +78,6 @@ public class WebSocketController {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-//                session.getBasicRemote().sendText(chatModel.toJson());
                 chatModel.setMsg(chatModel.getName() + " 님이 입장하셨습니다.");
             case "msg":
                 sendAllSessionToMessage(chatModel.getRoomid(), chatModel.toJson());
@@ -103,7 +93,6 @@ public class WebSocketController {
     @OnClose
     public void onClose(Session session) {
         logger.info("Session " + session.getId() + " has ended");
-//        sendAllSessionToMessage(session, "server", session.getId() + " 님이 퇴장하셧습니다.");
         try {
             ChatModel user = userList.get(session.getId());
             user.setMsg(user.getName() + " 님이 퇴장하셨습니다.");
@@ -114,7 +103,6 @@ public class WebSocketController {
             chatList.get(reverseChatList.get(session)).remove(session);
             reverseChatList.remove(session);
             sessionList.remove(session);
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
