@@ -93,7 +93,6 @@
 
     h2 {
         color: tomato;
-        font-size: 2em;
     }
 
     .login_sns {

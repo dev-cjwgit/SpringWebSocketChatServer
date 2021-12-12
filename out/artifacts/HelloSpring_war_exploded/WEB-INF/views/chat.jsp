@@ -3,7 +3,7 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>${roomName} 에 오신것을 환영합니다.</title>
+    <title>${roomId} 에 오신것을 환영합니다.</title>
 </head>
 
 
@@ -16,7 +16,7 @@
 <button type="button" onclick="clearChat();">채팅 청소하기</button>
 <div class="chat_wrap">
     <div class="header">
-        ${roomName} 에 오신것을 환영합니다.
+        ${roomId} 에 오신것을 환영합니다.
     </div>
     <div class="chat">
         <ul>
@@ -90,7 +90,7 @@
 
         ws.onmessage = function (event) {
             var parseData = JSON.parse(event.data);
-            if (parseData.roomid === "${roomName}") {
+            if (parseData.roomid === "${roomId}") {
                 writeResponse(parseData);
             }
         };
@@ -105,7 +105,7 @@
             "cmd": cmd,
             "type": type,
             "name": name,
-            "roomid": "${roomName}",
+            "roomid": "${roomId}",
             "email": "${userEmail}",
             "msg": message
         };

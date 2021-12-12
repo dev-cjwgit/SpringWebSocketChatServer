@@ -46,7 +46,7 @@ public class AccountController {
             session.setAttribute("account", dto);
             mav.setViewName("chat");
             mav.addObject("userEmail", userEmail);
-            mav.addObject("roomName", roomid);
+            mav.addObject("roomId", roomid);
         } else {
             mav.setViewName("login");
         }
