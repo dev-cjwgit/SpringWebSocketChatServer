@@ -10,18 +10,28 @@ public class ChatModel implements Cloneable {
     private String name;
     private String msg;
     private String email;
+    private String roomid;
 
     @Override
     public ChatModel clone() throws CloneNotSupportedException {
         return (ChatModel) super.clone();
     }
 
-    public ChatModel(String cmd, String type, String name, String msg, String email) {
+    public ChatModel(String cmd, String type, String name, String msg, String email, String roomid) {
         this.cmd = cmd;
         this.type = type;
         this.name = name;
         this.msg = msg;
         this.email = email;
+        this.roomid = roomid;
+    }
+
+    public String getRoomid() {
+        return roomid;
+    }
+
+    public void setRoomid(String roomid) {
+        this.roomid = roomid;
     }
 
     public String getEmail() {

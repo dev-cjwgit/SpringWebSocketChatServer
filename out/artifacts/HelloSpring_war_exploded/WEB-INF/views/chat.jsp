@@ -3,12 +3,176 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>로그인 정보</title>
+    <title>${roomName} 에 오신것을 환영합니다.</title>
 </head>
 
 
 <body style="top:50px;" class="mainbody">
 <hr>
+
+
+<button type="button" onclick="openSocket();">대화방 참여</button>
+<button type="button" onclick="closeSocket();">대회방 나가기</button>
+<button type="button" onclick="clearChat();">채팅창 청소</button>
+
+<div class="chat_wrap">
+    <div class="header">
+        ${roomName} 에 오신것을 환영합니다.
+    </div>
+    <div class="chat">
+        <ul>
+            <!-- 동적 생성 -->
+        </ul>
+    </div>
+    <div class="input-div">
+        <textarea placeholder="Press Enter for send message."></textarea>
+    </div>
+
+    <!-- format -->
+
+    <div class="chat-format">
+        <ul>
+            <li>
+                <div class="sender">
+                    <span></span>
+                </div>
+                <div class="message">
+                    <span></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="server-format">
+        <ul>
+            <li>
+                <div>
+                    <span></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var ws;
+    var name = "익명";
+
+    function init() {
+        // enter 키 이벤트
+        $(document).on('keydown', 'div.input-div textarea', function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                const message = $(this).val();
+                if (message === "") {
+                    alert("메세지를 입력해주세요.");
+                    return;
+                }
+                // 메시지 전송
+                send("msg", "text", message);
+                // 입력창 clear
+                clearTextarea();
+            }
+        });
+
+        openSocket();
+    }
+
+    function openSocket() {
+        if (ws !== undefined && ws.readyState !== WebSocket.CLOSED) {
+            return;
+        }
+        //웹소켓 객체 만드는 코드
+        ws = new WebSocket("ws://211.195.149.103:8080/echo.do");
+        ws.onopen = function (event) {
+            send("enter_user", "text", "connect");
+        };
+
+        ws.onmessage = function (event) {
+            var parseData = JSON.parse(event.data);
+            if (parseData.roomid === "${roomName}") {
+                writeResponse(parseData);
+            }
+        };
+
+        ws.onclose = function (event) {
+            appendMessageTag("server", "", "서버와 연결이 끊겼습니다.");
+        }
+    }
+
+    function send(cmd, type, message) {
+        data = {
+            "cmd": cmd,
+            "type": type,
+            "name": name,
+            "roomid": "${roomName}",
+            "email": "${userEmail}",
+            "msg": message
+        };
+        ws.send(JSON.stringify(data));
+    }
+
+    function closeSocket() {
+        ws.close();
+    }
+
+    function writeResponse(json) {
+        var LR;
+        if (json.cmd === "enter_user" || json.cmd === "exit_user") {
+            LR = "server";
+            if (json.email === "${userEmail}") {
+                name = json.name;
+            }
+        } else if (json.email === "${userEmail}") {
+            LR = "right"
+        } else {
+            LR = "left"
+        }
+        appendMessageTag(LR, json.name, json.msg);
+    }
+
+    function appendMessageTag(LR_className, name, msg) {
+        const chatLi = createMessageTag(LR_className, name, msg);
+        $('div.chat ul').append(chatLi);
+
+        // 스크롤바 아래 고정
+        window.scroll(0, $("div.chat")[0].scrollHeight)
+        // $("#mainbody").scrollTop($("div.chat")[0].scrollHeight);
+    }
+
+    // 메세지 태그 생성
+    function createMessageTag(LR_className, name, msg) {
+        // 형식 가져오기
+        let chatLi
+        if (LR_className !== "server") {
+            chatLi = $('div.chat-format ul li').clone();
+            // 값 채우기
+            chatLi.addClass(LR_className);
+            chatLi.find('.sender span').text(name);
+            chatLi.find('.message span').text(msg);
+        } else {
+            chatLi = $('div.server-format ul li').clone();
+            // chatLi.children().removeClass("message");
+            // 값 채우기
+            chatLi.addClass("server");
+            chatLi.find('span').text(msg);
+
+        }
+        return chatLi;
+    }
+
+    function clearTextarea() {
+        $('div.input-div textarea').val('');
+    }
+
+    function clearChat() {
+        $('div.chat ul').empty();
+    }
+
+    window.onload = init();
+</script>
+
 <style type="text/css">
     * {
         margin: 0;
@@ -91,167 +255,6 @@
         padding: 10px;
     }
 </style>
-
-
-<button type="button" onclick="openSocket();">대화방 참여</button>
-<button type="button" onclick="closeSocket();">대회방 나가기</button>
-<button type="button" onclick="clearChat();">채팅창 청소</button>
-
-<div class="chat_wrap">
-    <div class="header">
-        CHAT
-    </div>
-    <div class="chat">
-        <ul>
-            <!-- 동적 생성 -->
-        </ul>
-    </div>
-    <div class="input-div">
-        <textarea placeholder="Press Enter for send message."></textarea>
-    </div>
-
-    <!-- format -->
-
-    <div class="chat-format">
-        <ul>
-            <li>
-                <div class="sender">
-                    <span></span>
-                </div>
-                <div class="message">
-                    <span></span>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    <div class="server-format">
-        <ul>
-            <li>
-                <div>
-                    <span></span>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-
-
-<script type="text/javascript">
-    var ws;
-    var name = "익명";
-
-    function init() {
-        // enter 키 이벤트
-        $(document).on('keydown', 'div.input-div textarea', function (e) {
-            if (e.keyCode == 13 && !e.shiftKey) {
-                e.preventDefault();
-                const message = $(this).val();
-                if (message === "") {
-                    alert("메세지를 입력해주세요.");
-                    return;
-                }
-                // 메시지 전송
-                send("msg", "text", message);
-                // 입력창 clear
-                clearTextarea();
-            }
-        });
-
-        openSocket();
-    }
-
-    function openSocket() {
-        if (ws !== undefined && ws.readyState !== WebSocket.CLOSED) {
-            return;
-        }
-        //웹소켓 객체 만드는 코드
-        ws = new WebSocket("ws://211.195.149.103:8080/echo.do");
-        ws.onopen = function (event) {
-            send("enter_user", "text", "connect");
-        };
-
-        ws.onmessage = function (event) {
-            var parseData = JSON.parse(event.data);
-            writeResponse(parseData);
-        };
-
-        ws.onclose = function (event) {
-            appendMessageTag("server", "", "서버와 연결이 끊겼습니다.");
-        }
-    }
-
-    function send(cmd, type, message) {
-        data = {
-            "cmd": cmd,
-            "type": type,
-            "name": name,
-            "email": "${userEmail}",
-            "msg": message
-        };
-        ws.send(JSON.stringify(data));
-    }
-
-    function closeSocket() {
-        ws.close();
-    }
-
-    function writeResponse(json) {
-        var LR;
-        if (json.cmd === "enter_user" || json.cmd === "exit_user") {
-            LR = "server";
-            if(json.email === "${userEmail}") {
-                name = json.name;
-            }
-        } else if (json.email === "${userEmail}") {
-            LR = "right"
-        } else {
-            LR = "left"
-        }
-        appendMessageTag(LR, json.name, json.msg);
-    }
-
-    function appendMessageTag(LR_className, name, msg) {
-        const chatLi = createMessageTag(LR_className, name, msg);
-        $('div.chat ul').append(chatLi);
-
-        // 스크롤바 아래 고정
-        window.scroll(0, $("div.chat")[0].scrollHeight)
-        // $("#mainbody").scrollTop($("div.chat")[0].scrollHeight);
-    }
-
-    // 메세지 태그 생성
-    function createMessageTag(LR_className, name, msg) {
-        // 형식 가져오기
-        let chatLi
-        if (LR_className !== "server") {
-            chatLi = $('div.chat-format ul li').clone();
-            // 값 채우기
-            chatLi.addClass(LR_className);
-            chatLi.find('.sender span').text(name);
-            chatLi.find('.message span').text(msg);
-        } else {
-            chatLi = $('div.server-format ul li').clone();
-            // chatLi.children().removeClass("message");
-            // 값 채우기
-            chatLi.addClass("server");
-            chatLi.find('span').text(msg);
-
-        }
-        return chatLi;
-    }
-
-    function clearTextarea() {
-        $('div.input-div textarea').val('');
-    }
-
-    function clearChat() {
-        $('div.chat ul').empty();
-    }
-
-    window.onload = init();
-</script>
-
 
 </body><!-- websocket javascript -->
 
