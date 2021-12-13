@@ -56,9 +56,6 @@
         </div>
     </div>
 </form>
-<style type="text/css">
-
-</style>
 </body>
 </html>
 

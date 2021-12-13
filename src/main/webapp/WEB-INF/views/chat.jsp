@@ -119,7 +119,15 @@
         };
 
         ws.onclose = function (event) {
-            appendMessageTag("server", "", "서버와 연결이 끊겼습니다.");
+            data = {
+                "cmd": "server",
+                "type": "text",
+                "name": null,
+                "roomid": "${roomId}",
+                "email": "chlwlsdn@chat.com",
+                "msg": "서버와의 연결이 종료되었습니다."
+            };
+            appendMessageTag(data);
         }
     }
 
