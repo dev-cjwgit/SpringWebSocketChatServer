@@ -75,6 +75,7 @@ public class WebSocketController {
                     }
                     reverseChatList.put(session, chatModel.getRoomid());
                     chatList.get(chatModel.getRoomid()).add(session);
+                    System.out.println(chatModel.getName() + " 님이[" + chatModel.getRoomid() +  "[에 접속하셨습니다.");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

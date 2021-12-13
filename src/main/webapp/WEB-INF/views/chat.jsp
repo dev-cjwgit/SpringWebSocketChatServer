@@ -162,7 +162,7 @@
     function createMessageTag(json) {
         // 형식 가져오기
         let chatLi
-        if (json.cmd === "enter_user" || json.cmd === "exit_user") {
+        if (json.cmd === "enter_user" || json.cmd === "exit_user" || json.cmd === "server") {
             chatLi = createServerMessageTag(json.msg)
         } else {
             if (json.email === "${userEmail}") {
